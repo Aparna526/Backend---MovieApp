@@ -1,61 +1,93 @@
 package Movie.Movie;
 
-
-
-
 import java.util.List;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
-@RequestMapping("/api/movies")
+
 public class Controller {
+    private final MovieService ms;
 
-    private final MovieService movieService;
-
-    public Controller(MovieService movieService) {
-        this.movieService = movieService;
-    }
-    @PostMapping("saveMovies")
-    public Movie saved(@RequestBody Movie m){
-        return movieService.saved(m);
-
-    }
-    @PostMapping("saveBulk")
-    public List<Movie>saveBulk(@RequestBody List<Movie>m){
-        return movieService.savebulk(m);
+    public Controller(MovieService ms) {
+        this.ms = ms;
     }
 
-    
+    @PostMapping("saved")
+    public MovieApp savedata(@RequestBody MovieApp entity) {
+
+        return ms.savedata(entity);
+    }
+
+    @PostMapping("savebulk")
+    public List<MovieApp> savebulk1(@RequestBody List<MovieApp> entity) {
+        return ms.savebulk(entity);
+    }
+
+    @GetMapping("/{genre1}")
+    public List<MovieApp> getMoviesByGenre(@PathVariable String genre1) throws Exception {
+        return ms.getMoviesByGenre(genre1);
+    }
+
     @GetMapping("/popular")
-    public List<Movie> getPopularMovies() {
-        return movieService.getPopularMovies();
+    public List<MovieApp> PopularMovies() {
+        return ms.getPopularMovies();
     }
 
-    @GetMapping("/genre/{genre}")
-    public List<Movie> getMoviesByGenre(@PathVariable String genre) {
-        return movieService.getMoviesByGenre(genre);
+    @GetMapping("/allmovies1")
+    public List<MovieApp> getallmovies432() {
+        return ms.getallmovies123();
     }
-    @GetMapping("findbyname/{name}")
-    public Movie getbyname(@PathVariable String name){
-        return movieService.findbyName(name);
+
+    @PostMapping("/byname/{entity}")
+    public List<MovieApp> postMethodName(@PathVariable String entity) {
+        return ms.getnames(entity.toLowerCase());
     }
-    @GetMapping("Search/{name}")
-    public List<Movie>getSimilar(@PathVariable String name){
-        return movieService.search(name);
+
+    @PutMapping("/movies/{id}/{newTitle}")
+    public void updateMovieName(@PathVariable Long id, @PathVariable String newTitle) {
+        ms.updateMovieName(id, newTitle); // Update movie title
     }
+
+    @PostMapping("/delete/{name}")
+    public List<MovieApp> deleteByName(@PathVariable String name) throws Exception {
+        return ms.deleteMovieByName(name);
+    }
+
     @GetMapping("/upcoming")
-    public List<Movie> getUpcomingMovies() {
-        return movieService.getUpcomingMovies();
+    public List<MovieApp> getMethodName() {
+        return ms.getnewmovies();
     }
-    @GetMapping("/desc")
-    public List<Movie> getMoviesBasedondesc(){
-        return movieService.getMoviesbydesc();
+
+    @GetMapping("/pastmovies")
+    public List<MovieApp> pastmovies() {
+        return ms.getpast();
     }
-    @DeleteMapping("/del/{id}")
-    public String deletemovie(@PathVariable Long id){
-        return movieService.deletemovie(id);
+
+    @GetMapping("/findupcoming")
+    public List<MovieApp> getfindbyupcoming() {
+        return ms.getmoviesupcoming();
+    }
+
+    @GetMapping("/allmovies")
+    public List<MovieApp> getmovies() {
+        return ms.getsmovies();
+    }
+
+    @GetMapping("/rating")
+    public float getRating() {
+        return ms.getAvgMovieRating();
+    }
+
+    @GetMapping("/avgrating")
+    public List<MovieApp> getavgratings() {
+        return ms.getmovierating();
     }
 
 }
